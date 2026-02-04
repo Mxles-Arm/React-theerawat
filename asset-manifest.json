@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/React-theerawat/static/css/main.e6c13ad2.css",
+    "main.js": "/React-theerawat/static/js/main.9a6dcd03.js",
+    "static/js/453.26f86030.chunk.js": "/React-theerawat/static/js/453.26f86030.chunk.js",
+    "index.html": "/React-theerawat/index.html",
+    "main.e6c13ad2.css.map": "/React-theerawat/static/css/main.e6c13ad2.css.map",
+    "main.9a6dcd03.js.map": "/React-theerawat/static/js/main.9a6dcd03.js.map",
+    "453.26f86030.chunk.js.map": "/React-theerawat/static/js/453.26f86030.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.9a6dcd03.js"
+  ]
+}
