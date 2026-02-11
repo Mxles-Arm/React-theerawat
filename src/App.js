@@ -3,7 +3,6 @@ import Footer from "./components/Footer";
 import Student from "./components/student";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Activity from "./components/Activity";
-import PageNotFound from "./components/PageNotFound";
 import Education from "./components/Education";
 
 function App() {
