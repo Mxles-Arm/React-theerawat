@@ -1,12 +1,12 @@
-import Arm from '../image/me01.jpg';
+import Arm from '../image/me01.png';
 import '../css/tct.css';
-function Student(props){
-    return(
-        
+function Student(props) {
+    return (
+
         <div >
-            <div style={{backgroundColor: '#CCC'}}>
-            <h1>My Profile</h1>
-            <div className='img-center'><img src={Arm} alt="Arm" width="200" height="200"/></div>
+            <div style={{ backgroundColor: '#CCC' }}>
+                <h1>My Profile</h1>
+                <div className='img-center'><img src={Arm} alt="Arm" width="200" height="200" /></div>
             </div>
             <h1> Introduct </h1>
             <hr />
