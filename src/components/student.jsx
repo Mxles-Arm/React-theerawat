@@ -1,4 +1,4 @@
-import Leaf from '../image/Leaffy.jpg'
+import Arm from '../me01.png';
 import '../css/tct.css';
 function Student(props){
     return(
@@ -6,7 +6,7 @@ function Student(props){
         <div >
             <div style={{backgroundColor: '#CCC'}}>
             <h1>My Profile</h1>
-            <div className='img-center'><img src={Leaf} alt="Leaf" width="200" height="200"/></div>
+            <div className='img-center'><img src={Arm} alt="Arm" width="200" height="200"/></div>
             </div>
             <h1> Introduct </h1>
             <hr />
