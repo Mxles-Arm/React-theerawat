@@ -1,12 +1,14 @@
-import picture from '../image/Self.jpg'
-import '../css/tct.css'
+import Leaf from '../image/Leaffy.jpg'
+import '../css/tct.css';
 function Student(props){
     return(
         
         <div >
-            
+            <div style={{backgroundColor: '#CCC'}}>
+            <h1>My Profile</h1>
+            <div className='img-center'><img src={Leaf} alt="Leaf" width="200" height="200"/></div>
+            </div>
             <h1> Introduct </h1>
-            <img  src = {picture} alt='myself picture'width = {200} />
             <hr />
             Name: {props.stdInfo.name //props.name
             }
