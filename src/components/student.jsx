@@ -1,4 +1,4 @@
-import Arm from '../me01.png';
+import Arm from '../image/me01.jpg';
 import '../css/tct.css';
 function Student(props){
     return(
