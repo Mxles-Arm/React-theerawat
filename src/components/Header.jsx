@@ -52,6 +52,22 @@ const Header = () => {
             >
                 Hobby
             </Link>
+
+            <Link 
+                to='/tct-form' 
+                style={{
+                    color: "white",
+                    textDecoration: "none",
+                    margin: "0 15px",
+                    padding: "8px 15px",
+                    backgroundColor: "#d9a066",
+                    borderRadius: "20px"
+                }}
+            >
+                TCT Form
+            </Link>
+
+
         </div>
     )
 }
