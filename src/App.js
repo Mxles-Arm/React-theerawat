@@ -4,7 +4,7 @@ import Student from "./components/student";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Activity from "./components/Activity";
 import Education from "./components/Education";
-import 
+
 
 function App() {
   const std1 = {
