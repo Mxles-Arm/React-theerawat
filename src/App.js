@@ -4,6 +4,7 @@ import Student from "./components/student";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Activity from "./components/Activity";
 import Education from "./components/Education";
+import TCTForm from './components/TCTForm.jsx';
 
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div style={{ backgroundColor: '#a9c567', minHeight: '100vh' }}>
+      <div style={{ backgroundColor: '#d6fc7e', minHeight: '100vh' }}>
         <Header />
 
         <Routes>
@@ -28,6 +29,9 @@ function App() {
 
           {/* ถ้า path ไม่ตรง ให้กลับ Home */}
           <Route path="*" element={<Navigate to="/" replace />} />
+
+          <Route path="/tct-form" element={<TCTForm />} />
+
         </Routes>
 
         <Footer />
