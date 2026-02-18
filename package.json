@@ -2,7 +2,7 @@
   "name": "react1",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://Mxles-Arm.github.io/React-theerawat",
+ "homepage": "https://mxles-arm.github.io/React-theerawat",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
