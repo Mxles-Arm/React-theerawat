@@ -9,7 +9,7 @@ const Header = () => {
             color: "white",
             boxShadow: "0 4px 8px rgba(0,0,0,0.2)"
         }}>
-            <h1 style={{marginBottom: "15px"}}>WebTech TCT 2/68</h1>
+            <h1 style={{marginBottom: "15px"}}>WebTech TCT </h1>
 
             <Link 
                 to='/' 
