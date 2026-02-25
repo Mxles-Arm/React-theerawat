@@ -103,7 +103,7 @@ export default function ItunesPage() {
 
         {!isLoading && items.length === 0 ? (
           <div style={styles.empty}>
-            พิมพ์คำค้น แล้วกด “ค้นหา” (เช่น: <b>Bruno Mars</b>)
+            พิมพ์คำค้น แล้วกด “ค้นหา” (เช่น: <b>Oasis</b>)
           </div>
         ) : null}
 
@@ -216,7 +216,7 @@ export default function ItunesPage() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "#0b0f19",
+    background: "#000000",
     color: "#e8eefc",
     fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial",
   },

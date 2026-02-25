@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 const Header = () => {
     return(
         <div style={{
-            background: "#2f4cee",
+            background: "#2fa8ee",
             padding: "20px",
             textAlign: "center",
             color: "white",
-            boxShadow: "0 4px 8px rgba(0,0,0,0.2)"
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
         }}>
             <h1 style={{marginBottom: "15px"}}>WebTech TCT </h1>
 
