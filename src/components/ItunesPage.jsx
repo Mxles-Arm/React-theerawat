@@ -1,7 +1,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-export default function itunes() {
+export default function ItunesPage() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");

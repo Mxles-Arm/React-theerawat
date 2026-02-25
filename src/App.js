@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Activity from "./components/Activity";
 import Education from "./components/Education";
 import TCTForm from "./components/TCTForm.jsx";
-import Itunes from "./components/itunes"; // ✅ แก้ตรงนี้
+import Itunes from "./components/ItunesPage.jsx";
 
 function App() {
   const std1 = {
@@ -23,7 +23,7 @@ function App() {
           <Route path="/" element={<Student stdInfo={std1} />} />
           <Route path="/edu" element={<Education />} />
           <Route path="/activity" element={<Activity />} />
-          <Route path="/itunes" element={<Itunes />} />
+          <Route path="/Itunes" element={<Itunes />} />
           <Route path="/tct-form" element={<TCTForm />} />
 
           {/* ✅ ต้องไว้ล่างสุด */}
