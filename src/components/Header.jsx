@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Header = () => {
     return(
         <div style={{
-            background: "#b792d5",
+            background: "#2f4cee",
             padding: "20px",
             textAlign: "center",
             color: "white",
@@ -67,6 +67,19 @@ const Header = () => {
                 TCT Form
             </Link>
 
+                 <Link 
+                to='/itunes' 
+                style={{
+                    color: "white",
+                    textDecoration: "none",
+                    margin: "0 15px",
+                    padding: "8px 15px",
+                    backgroundColor: "#d9a066",
+                    borderRadius: "20px"
+                }}
+            >
+                Music
+            </Link>
 
         </div>
     )

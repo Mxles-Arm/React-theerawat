@@ -3,8 +3,8 @@ import { useState } from "react";
 function XXXForm() {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState("");   // ⭐ เปลี่ยนชื่อให้ตรง
-  const [region, setRegion] = useState("");   // ⭐ เปลี่ยนชื่อให้ตรง
+  const [gender, setGender] = useState("");   
+  const [region, setRegion] = useState("");   
   const [comment, setComment] = useState("");
   const [accept, setAccept] = useState(false);
 
@@ -33,7 +33,7 @@ Accept: ${accept ? "Yes" : "No"}
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#f4f6f8",
+        background: "#80b5ea",
       }}
     >
       <form
