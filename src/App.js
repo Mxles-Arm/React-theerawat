@@ -12,35 +12,49 @@ import Itunes from "./components/ItunesPage.jsx";
 import auth from "./firebase_config.js";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 
-function App() {
+const App = () => {
+  const [userInfo, setUserInfo] = useState(null);
+
+  
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserInfo(user);
+      } else {
+        setUserInfo(null);
+      }
+    });
+  }, []); 
+
+  
+  const login = () => {
+    const provider = new GoogleAuthProvider();
+    auth.useDeviceLanguage();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        
+      })
+      .catch((error) => {
+        window.alert(error.message);
+      });
+  };
+
+  
+  const logout = () => {
+    signOut(auth).catch((error) => {
+      alert(error.message);
+    });
+  };
+
   const std1 = {
     name: "Theerawat Noonngam",
     stdid: "6802041510180",
     sect: "TCT",
   };
 
-  const [userInfo, setUserInfo] = useState(null);
-
-  useEffect(() => {
-    const unsub = auth.onAuthStateChanged((user) => {
-      setUserInfo(user ? user : null);
-    });
-    return () => unsub();
-  }, []);
-
-  const login = () => {
-    const provider = new GoogleAuthProvider();
-    auth.useDeviceLanguage();
-    signInWithPopup(auth, provider).catch((err) => alert(err.message));
-  };
-
-  const logout = () => {
-    signOut(auth).catch((err) => alert(err.message));
-  };
-
+  
   return (
     <div style={{ backgroundColor: "#d6fc7e", minHeight: "100vh" }}>
-      
       <Header user={userInfo} login={login} logout={logout} />
 
       <Routes>
@@ -50,13 +64,13 @@ function App() {
         <Route path="/Itunes" element={<Itunes />} />
         <Route path="/tct-form" element={<TCTForm />} />
 
-        
+       
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
       <Footer />
     </div>
   );
-}
+};
 
 export default App;

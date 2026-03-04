@@ -26,7 +26,7 @@ export default function ItunesPage() {
   };
 
   useEffect(() => {
-    // ปิด modal ด้วยปุ่ม ESC
+    
     const onKeyDown = (e) => {
       if (e.key === "Escape") closeModal();
     };
@@ -41,7 +41,7 @@ export default function ItunesPage() {
     const term = searchTerm.trim();
     if (!term) return;
 
-    // ยกเลิก request เดิมถ้ามี
+    
     if (abortRef.current) abortRef.current.abort();
     const controller = new AbortController();
     abortRef.current = controller;
@@ -57,7 +57,7 @@ export default function ItunesPage() {
 
       const data = await res.json();
 
-      // iTunes ส่วนใหญ่เป็น https อยู่แล้ว แต่กันไว้ตามที่คุณทำก็ได้
+    
       const secureData = (data.results || []).map((item) => ({
         ...item,
         previewUrl: item.previewUrl ? item.previewUrl.replace("http://", "https://") : "",
@@ -122,7 +122,7 @@ export default function ItunesPage() {
                   <button
                     style={styles.openBtn}
                     onClick={() => {
-                      // pause ทุกตัวก่อนเปิด modal
+                      
                       pauseAllExcept(null);
                       setSelectedItem(item);
                     }}
@@ -162,7 +162,7 @@ export default function ItunesPage() {
         </div>
       </div>
 
-      {/* Modal */}
+     
       {selectedItem ? (
         <div
           style={styles.modalOverlay}
