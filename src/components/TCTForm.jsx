@@ -69,7 +69,7 @@ Accept: ${accept ? "Yes" : "No"}
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#80b5ea",
+        background: "#b3cce6",
       }}
     >
       <form

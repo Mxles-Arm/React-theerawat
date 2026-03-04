@@ -1,9 +1,11 @@
 export function Footer() {
     const style1 = {
-        backgroundColor: '#000000',
+        backgroundColor: '#5492d4',
         color: 'white',
         fontSize: '18px',
-        fontFamily: 'Arial'
+        fontFamily: 'Arial',
+        textAlign: 'center',
+        padding: '15px'
     };
 
     return(
