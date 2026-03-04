@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Student from "./components/student";
@@ -7,6 +9,9 @@ import Education from "./components/Education";
 import TCTForm from "./components/TCTForm.jsx";
 import Itunes from "./components/ItunesPage.jsx";
 
+import auth from "./firebase_config.js";
+import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+
 function App() {
   const std1 = {
     name: "Theerawat Noonngam",
@@ -14,9 +19,29 @@ function App() {
     sect: "TCT",
   };
 
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const unsub = auth.onAuthStateChanged((user) => {
+      setUserInfo(user ? user : null);
+    });
+    return () => unsub();
+  }, []);
+
+  const login = () => {
+    const provider = new GoogleAuthProvider();
+    auth.useDeviceLanguage();
+    signInWithPopup(auth, provider).catch((err) => alert(err.message));
+  };
+
+  const logout = () => {
+    signOut(auth).catch((err) => alert(err.message));
+  };
+
   return (
     <div style={{ backgroundColor: "#d6fc7e", minHeight: "100vh" }}>
-      <Header />
+      
+      <Header user={userInfo} login={login} logout={logout} />
 
       <Routes>
         <Route path="/" element={<Student stdInfo={std1} />} />
@@ -25,7 +50,7 @@ function App() {
         <Route path="/Itunes" element={<Itunes />} />
         <Route path="/tct-form" element={<TCTForm />} />
 
-        {/* ต้องไว้ล่างสุด */}
+        
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
