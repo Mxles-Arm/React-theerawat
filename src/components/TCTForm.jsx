@@ -1,12 +1,48 @@
 import { useState } from "react";
 
-function XXXForm() {
+function XXXForm({ userInfo, login }) {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState("");   
-  const [region, setRegion] = useState("");   
+  const [gender, setGender] = useState("");
+  const [region, setRegion] = useState("");
   const [comment, setComment] = useState("");
   const [accept, setAccept] = useState(false);
+
+  // 🔒 ถ้ายังไม่ login ให้ขึ้นหน้าบอกและมีปุ่มให้ login
+  if (!userInfo) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "#80b5ea",
+          padding: 24,
+        }}
+      >
+        <div
+          style={{
+            background: "white",
+            padding: "30px",
+            borderRadius: "16px",
+            boxShadow: "0 8px 25px rgba(0,0,0,0.1)",
+            width: "420px",
+            textAlign: "center",
+          }}
+        >
+          <h2 style={{ marginBottom: 12 }}>TCT Form</h2>
+          <p style={{ marginBottom: 18, color: "#555" }}>
+            Please sign in to access this form.
+          </p>
+
+          <button type="button" onClick={login} style={buttonStyle}>
+            Sign in with Google
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -46,9 +82,7 @@ Accept: ${accept ? "Yes" : "No"}
           width: "400px",
         }}
       >
-        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-          TCT Form
-        </h2>
+        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>TCT Form</h2>
 
         {/* First Name */}
         <div style={{ marginBottom: "15px" }}>
@@ -76,26 +110,38 @@ Accept: ${accept ? "Yes" : "No"}
         <div style={{ marginBottom: "15px" }}>
           <label>What is Gender</label>
           <div style={{ marginTop: "8px" }}>
-            <input
-              type="radio"
-              name="gender"
-              value="Male"
-              onChange={(e) => setGender(e.target.value)}
-            /> Male{" "}
+            <label style={{ marginRight: 10 }}>
+              <input
+                type="radio"
+                name="gender"
+                value="Male"
+                checked={gender === "Male"}
+                onChange={(e) => setGender(e.target.value)}
+              />{" "}
+              Male
+            </label>
 
-            <input
-              type="radio"
-              name="gender"
-              value="Female"
-              onChange={(e) => setGender(e.target.value)}
-            /> Female{" "}
+            <label style={{ marginRight: 10 }}>
+              <input
+                type="radio"
+                name="gender"
+                value="Female"
+                checked={gender === "Female"}
+                onChange={(e) => setGender(e.target.value)}
+              />{" "}
+              Female
+            </label>
 
-            <input
-              type="radio"
-              name="gender"
-              value="Ninja"
-              onChange={(e) => setGender(e.target.value)}
-            /> Ninja
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Ninja"
+                checked={gender === "Ninja"}
+                onChange={(e) => setGender(e.target.value)}
+              />{" "}
+              Ninja
+            </label>
           </div>
         </div>
 
@@ -107,13 +153,12 @@ Accept: ${accept ? "Yes" : "No"}
             onChange={(e) => setRegion(e.target.value)}
             style={inputStyle}
           >
-            <option value="">
-              -- Which region of the country are you from? --
-            </option>
+            <option value="">-- Which region of the country are you from? --</option>
             <option value="Northern">Northern</option>
             <option value="Central">Central</option>
-            <option value="Southern">Northeastern</option>
-            <option value="Eastern">Southern</option>
+            <option value="Northeastern">Northeastern</option>
+            <option value="Eastern">Eastern</option>
+            <option value="Southern">Southern</option>
           </select>
         </div>
 

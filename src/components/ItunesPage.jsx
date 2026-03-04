@@ -1,4 +1,3 @@
-
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 export default function ItunesPage() {
@@ -8,31 +7,45 @@ export default function ItunesPage() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [error, setError] = useState("");
 
-  // เก็บ video refs ของแต่ละการ์ด เพื่อสั่ง pause ตัวอื่น
-  const videoRefs = useRef(new Map());
+  // ✅ NEW: mode toggle (video | audio)
+  const [mode, setMode] = useState("video");
+
+  // เก็บ refs ของ media (ทั้ง audio และ video) เพื่อ pause ตัวอื่น
+  const mediaRefs = useRef(new Map());
   const abortRef = useRef(null);
 
   const canSearch = useMemo(() => searchTerm.trim().length > 0, [searchTerm]);
 
   const pauseAllExcept = (exceptKey) => {
-    for (const [key, vid] of videoRefs.current.entries()) {
-      if (!vid) continue;
-      if (key !== exceptKey && !vid.paused) vid.pause();
+    for (const [key, media] of mediaRefs.current.entries()) {
+      if (!media) continue;
+      if (key !== exceptKey && !media.paused) media.pause();
     }
   };
 
   const closeModal = () => {
+    // ปิด modal แล้วหยุดเสียง/วิดีโอใน modal ด้วย (กันเสียงค้าง)
+    const modalEl = document.getElementById("modalMedia");
+    if (modalEl && !modalEl.paused) modalEl.pause();
     setSelectedItem(null);
   };
 
   useEffect(() => {
-    
     const onKeyDown = (e) => {
       if (e.key === "Escape") closeModal();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // ✅ NEW: clear results when switching mode (optional but cleaner)
+  useEffect(() => {
+    setItems([]);
+    setSelectedItem(null);
+    setError("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
 
   const searchMV = async (e) => {
     if (e) e.preventDefault();
@@ -41,41 +54,54 @@ export default function ItunesPage() {
     const term = searchTerm.trim();
     if (!term) return;
 
-    
     if (abortRef.current) abortRef.current.abort();
     const controller = new AbortController();
     abortRef.current = controller;
 
     setIsLoading(true);
     try {
+      // ✅ UPDATED: entity depends on mode
+      const entity = mode === "video" ? "musicVideo" : "song";
+
       const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
         term
-      )}&entity=musicVideo&limit=18`;
+      )}&entity=${entity}&limit=24`;
 
       const res = await fetch(url, { signal: controller.signal });
       if (!res.ok) throw new Error("Fetch failed");
 
       const data = await res.json();
 
-    
-      const secureData = (data.results || []).map((item) => ({
-        ...item,
-        previewUrl: item.previewUrl ? item.previewUrl.replace("http://", "https://") : "",
-        artworkUrl100: item.artworkUrl100
-          ? item.artworkUrl100.replace("http://", "https://")
-          : "",
-      }));
+      const secureData = (data.results || [])
+        .map((item) => ({
+          ...item,
+          previewUrl: item.previewUrl
+            ? item.previewUrl.replace("http://", "https://")
+            : "",
+          artworkUrl100: item.artworkUrl100
+            ? item.artworkUrl100.replace("http://", "https://")
+            : "",
+        }))
+        // keep sort logic (only meaningful when mixed, but safe)
+        .sort((a, b) => {
+          const aIsVideo = a.kind === "music-video";
+          const bIsVideo = b.kind === "music-video";
+          return Number(bIsVideo) - Number(aIsVideo);
+        });
 
       setItems(secureData);
     } catch (err) {
       if (err?.name !== "AbortError") {
         console.error(err);
-        setError("โหลดข้อมูลไม่สำเร็จ ลองใหม่อีกครั้ง");
+        setError("An error occurred while fetching data. Please try again.");
       }
     } finally {
       setIsLoading(false);
     }
   };
+
+  const isVideoItem = (item) => item?.kind === "music-video";
+  const isAudioItem = (item) => item?.kind === "song";
 
   return (
     <div style={styles.page}>
@@ -83,33 +109,63 @@ export default function ItunesPage() {
         <header style={styles.header}>
           <div>
             <div style={styles.brand}>miniTunes</div>
-            <div style={styles.sub}>Search music videos via iTunes API</div>
+            <div style={styles.sub}>Search music videos + songs via iTunes API</div>
           </div>
 
           <form onSubmit={searchMV} style={styles.form}>
             <input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="ค้นหาเพลง / ศิลปิน เช่น Taylor Swift"
+              placeholder="Search songs / artists like : Oasis, AC/DC"
               style={styles.input}
             />
             <button type="submit" disabled={!canSearch || isLoading} style={styles.button}>
-              {isLoading ? "กำลังค้นหา..." : "ค้นหา"}
+              {isLoading ? "Searching..." : "Search"}
             </button>
           </form>
         </header>
+
+        {/* ✅ NEW: mode buttons */}
+        <div style={styles.modeRow}>
+          <button
+            type="button"
+            onClick={() => setMode("video")}
+            style={{
+              ...styles.modeBtn,
+              ...(mode === "video" ? styles.modeBtnActive : null),
+            }}
+          >
+            Video
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("audio")}
+            style={{
+              ...styles.modeBtn,
+              ...(mode === "audio" ? styles.modeBtnActive : null),
+            }}
+          >
+            Audio
+          </button>
+        </div>
 
         {error ? <div style={styles.error}>{error}</div> : null}
 
         {!isLoading && items.length === 0 ? (
           <div style={styles.empty}>
-            พิมพ์คำค้น แล้วกด “ค้นหา” (เช่น: <b>Oasis</b>)
+            Enter a keyword and click "Search" (like: <b>Oasis</b>)
           </div>
         ) : null}
 
         <div style={styles.grid}>
           {items.map((item) => {
-            const key = item.trackId;
+            const key = item.trackId || `${item.wrapperType}-${item.collectionId}-${item.trackName}`;
+            const typeLabel = isVideoItem(item) ? "VIDEO" : isAudioItem(item) ? "AUDIO" : "PREVIEW";
+
+            // ✅ NEW: enforce display by mode (for safety)
+            const shouldShowVideo = mode === "video";
+            const shouldShowAudio = mode === "audio";
+
             return (
               <div key={key} style={styles.card}>
                 <div style={styles.cardTop}>
@@ -119,15 +175,17 @@ export default function ItunesPage() {
                     style={styles.cover}
                     loading="lazy"
                   />
+
+                  <div style={styles.badge}>{typeLabel}</div>
+
                   <button
                     style={styles.openBtn}
                     onClick={() => {
-                      
                       pauseAllExcept(null);
                       setSelectedItem(item);
                     }}
                   >
-                    ดูรายละเอียด
+                    View details
                   </button>
                 </div>
 
@@ -140,20 +198,38 @@ export default function ItunesPage() {
                   </div>
 
                   {item.previewUrl ? (
-                    <video
-                      controls
-                      preload="none"
-                      style={styles.video}
-                      ref={(el) => {
-                        if (el) videoRefs.current.set(key, el);
-                        else videoRefs.current.delete(key);
-                      }}
-                      onPlay={() => pauseAllExcept(key)}
-                    >
-                      <source src={item.previewUrl} type="video/mp4" />
-                    </video>
+                    shouldShowVideo ? (
+                      <video
+                        controls
+                        preload="none"
+                        style={styles.video}
+                        ref={(el) => {
+                          if (el) mediaRefs.current.set(key, el);
+                          else mediaRefs.current.delete(key);
+                        }}
+                        onPlay={() => pauseAllExcept(key)}
+                      >
+                        <source src={item.previewUrl} type="video/mp4" />
+                      </video>
+                    ) : shouldShowAudio ? (
+                      <audio
+                        controls
+                        preload="none"
+                        style={styles.audio}
+                        ref={(el) => {
+                          if (el) mediaRefs.current.set(key, el);
+                          else mediaRefs.current.delete(key);
+                        }}
+                        onPlay={() => pauseAllExcept(key)}
+                      >
+                        <source src={item.previewUrl} type="audio/mpeg" />
+                        <source src={item.previewUrl} type="audio/mp4" />
+                      </audio>
+                    ) : (
+                      <div style={styles.noPreview}>No preview link available</div>
+                    )
                   ) : (
-                    <div style={styles.noPreview}>ไม่มีลิงก์พรีวิว</div>
+                    <div style={styles.noPreview}>No preview link available</div>
                   )}
                 </div>
               </div>
@@ -162,7 +238,6 @@ export default function ItunesPage() {
         </div>
       </div>
 
-     
       {selectedItem ? (
         <div
           style={styles.modalOverlay}
@@ -182,14 +257,46 @@ export default function ItunesPage() {
             </div>
 
             {selectedItem.previewUrl ? (
-              <video id="modalVideo" controls autoPlay style={styles.modalVideo}>
-                <source src={selectedItem.previewUrl} type="video/mp4" />
-              </video>
+              mode === "video" ? (
+                <video
+                  id="modalMedia"
+                  controls
+                  autoPlay
+                  style={styles.modalVideo}
+                  onPlay={() => pauseAllExcept("MODAL")}
+                >
+                  <source src={selectedItem.previewUrl} type="video/mp4" />
+                </video>
+              ) : (
+                <div style={styles.modalAudioWrap}>
+                  <audio
+                    id="modalMedia"
+                    controls
+                    autoPlay
+                    style={styles.modalAudio}
+                    onPlay={() => pauseAllExcept("MODAL")}
+                  >
+                    <source src={selectedItem.previewUrl} type="audio/mpeg" />
+                    <source src={selectedItem.previewUrl} type="audio/mp4" />
+                  </audio>
+                </div>
+              )
             ) : (
-              <div style={styles.noPreview}>ไม่มีลิงก์พรีวิว</div>
+              <div style={styles.noPreview}>No preview link available</div>
             )}
 
             <div style={styles.modalInfo}>
+              <div>
+                <b>Mode:</b> {mode === "video" ? "Video" : "Audio"}
+              </div>
+              <div>
+                <b>Type:</b>{" "}
+                {isVideoItem(selectedItem)
+                  ? "Music Video"
+                  : isAudioItem(selectedItem)
+                  ? "Song (Audio)"
+                  : "-"}
+              </div>
               <div><b>Album:</b> {selectedItem.collectionName || "-"}</div>
               <div><b>Genre:</b> {selectedItem.primaryGenreName || "-"}</div>
               <div><b>Country:</b> {selectedItem.country || "-"}</div>
@@ -201,7 +308,7 @@ export default function ItunesPage() {
                     rel="noreferrer"
                     style={styles.link}
                   >
-                    เปิดใน iTunes
+                    View on iTunes
                   </a>
                 ) : null}
               </div>
@@ -216,7 +323,7 @@ export default function ItunesPage() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "#000000",
+    background: "#180b47",
     color: "#e8eefc",
     fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial",
   },
@@ -254,6 +361,28 @@ const styles = {
     color: "#e8eefc",
     cursor: "pointer",
   },
+
+  // ✅ NEW: mode buttons styles
+  modeRow: {
+    display: "flex",
+    gap: 10,
+    marginBottom: 14,
+  },
+  modeBtn: {
+    height: 36,
+    padding: "0 14px",
+    borderRadius: 999,
+    border: "1px solid rgba(255,255,255,0.12)",
+    background: "rgba(255,255,255,0.06)",
+    color: "#e8eefc",
+    cursor: "pointer",
+    fontWeight: 700,
+  },
+  modeBtnActive: {
+    background: "rgba(255,255,255,0.16)",
+    border: "1px solid rgba(255,255,255,0.22)",
+  },
+
   error: {
     padding: 12,
     borderRadius: 14,
@@ -280,8 +409,20 @@ const styles = {
     background: "rgba(255,255,255,0.04)",
     overflow: "hidden",
   },
-  cardTop: { position: "relative", padding: 14, display: "flex", gap: 12 },
+  cardTop: { position: "relative", padding: 14, display: "flex", gap: 12, alignItems: "center" },
   cover: { width: 72, height: 72, borderRadius: 16, objectFit: "cover" },
+  badge: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    padding: "4px 8px",
+    borderRadius: 999,
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: 0.5,
+    border: "1px solid rgba(255,255,255,0.16)",
+    background: "rgba(0,0,0,0.25)",
+  },
   openBtn: {
     marginLeft: "auto",
     height: 36,
@@ -291,18 +432,37 @@ const styles = {
     background: "rgba(255,255,255,0.08)",
     color: "#e8eefc",
     cursor: "pointer",
-    alignSelf: "center",
     whiteSpace: "nowrap",
   },
   meta: { padding: "0 14px 14px" },
-  title: { fontWeight: 800, fontSize: 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
-  artist: { opacity: 0.78, fontSize: 12, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
+  title: {
+    fontWeight: 800,
+    fontSize: 14,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
+  artist: {
+    opacity: 0.78,
+    fontSize: 12,
+    marginTop: 2,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
   video: {
     width: "100%",
     marginTop: 10,
     borderRadius: 14,
     border: "1px solid rgba(255,255,255,0.10)",
     background: "#000",
+  },
+  audio: {
+    width: "100%",
+    marginTop: 10,
+    borderRadius: 14,
+    border: "1px solid rgba(255,255,255,0.10)",
+    background: "rgba(0,0,0,0.25)",
   },
   noPreview: {
     marginTop: 10,
@@ -348,8 +508,15 @@ const styles = {
   },
   modalVideo: {
     width: "100%",
-    background: "#000",
+    background: "#000000",
     maxHeight: "60vh",
+  },
+  modalAudioWrap: { padding: 16 },
+  modalAudio: {
+    width: "100%",
+    borderRadius: 14,
+    border: "1px solid rgba(255,255,255,0.10)",
+    background: "rgba(0,0,0,0.25)",
   },
   modalInfo: { padding: 16, display: "grid", gap: 8, fontSize: 13, opacity: 0.92 },
   linkRow: { marginTop: 6 },
