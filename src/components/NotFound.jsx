@@ -1,9 +1,24 @@
 export default function NotFound() {
-  console.log("✅ NOT FOUND RENDERED");
   return (
-    <div style={{ textAlign: "center", padding: 60 }}>
-      <h1 style={{ fontSize: 60 }}>404 TEST</h1>
-      <p>ถ้าเห็นหน้านี้ แปลว่า NotFound ทำงาน</p>
+    <div style={{ textAlign: "center", padding: "60px" }}>
+      <h1>404</h1>
+      <h2>Page Not Found</h2>
+      <p>The page you are looking for does not exist.</p>
+
+      <a
+        href="#/"
+        style={{
+          display: "inline-block",
+          marginTop: "20px",
+          padding: "10px 20px",
+          background: "#2563eb",
+          color: "white",
+          borderRadius: "8px",
+          textDecoration: "none"
+        }}
+      >
+        Go Home
+      </a>
     </div>
   );
 }
