@@ -116,7 +116,7 @@ export default function ItunesPage() {
             <input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search songs / artists like : Oasis, AC/DC"
+              placeholder="Search songs / artists like : red hot chili peppers, AC/DC"
               style={styles.input}
             />
             <button type="submit" disabled={!canSearch || isLoading} style={styles.button}>
