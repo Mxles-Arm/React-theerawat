@@ -2,18 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCm_AVqecg8Qxac5Bshiv7dv7L2eUtTFMI",
-  authDomain: "theerawat-web.firebaseapp.com",
-  projectId: "theerawat-web",
-  storageBucket: "theerawat-web.firebasestorage.app",
-  messagingSenderId: "545068050908",
-  appId: "1:545068050908:web:cfc8f858e1d6d1fe1f0719"
+  apiKey: process.env.REACT_APP_API_KEY,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  appId: process.env.REACT_APP_APP_ID
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Create Auth object
 const auth = getAuth(app);
 
 export default auth;

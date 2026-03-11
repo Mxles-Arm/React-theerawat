@@ -8,7 +8,7 @@ function XXXForm({ userInfo, login }) {
   const [comment, setComment] = useState("");
   const [accept, setAccept] = useState(false);
 
-  // 🔒 ถ้ายังไม่ login ให้ขึ้นหน้าบอกและมีปุ่มให้ login
+  //  ถ้ายังไม่ login จะเด้งออกไปหน้า login ละม่ปุ่มๆๆให้กด 
   if (!userInfo) {
     return (
       <div

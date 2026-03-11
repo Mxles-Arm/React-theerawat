@@ -7,10 +7,10 @@ export default function ItunesPage() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [error, setError] = useState("");
 
-  // ✅ NEW: mode toggle (video | audio)
+ 
   const [mode, setMode] = useState("video");
 
-  // เก็บ refs ของ media (ทั้ง audio และ video) เพื่อ pause ตัวอื่น
+  
   const mediaRefs = useRef(new Map());
   const abortRef = useRef(null);
 
@@ -24,7 +24,7 @@ export default function ItunesPage() {
   };
 
   const closeModal = () => {
-    // ปิด modal แล้วหยุดเสียง/วิดีโอใน modal ด้วย (กันเสียงค้าง)
+  
     const modalEl = document.getElementById("modalMedia");
     if (modalEl && !modalEl.paused) modalEl.pause();
     setSelectedItem(null);
@@ -36,15 +36,15 @@ export default function ItunesPage() {
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, []);
 
-  // ✅ NEW: clear results when switching mode (optional but cleaner)
+ 
   useEffect(() => {
     setItems([]);
     setSelectedItem(null);
     setError("");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [mode]);
 
   const searchMV = async (e) => {
@@ -60,7 +60,7 @@ export default function ItunesPage() {
 
     setIsLoading(true);
     try {
-      // ✅ UPDATED: entity depends on mode
+      
       const entity = mode === "video" ? "musicVideo" : "song";
 
       const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
@@ -82,7 +82,7 @@ export default function ItunesPage() {
             ? item.artworkUrl100.replace("http://", "https://")
             : "",
         }))
-        // keep sort logic (only meaningful when mixed, but safe)
+       
         .sort((a, b) => {
           const aIsVideo = a.kind === "music-video";
           const bIsVideo = b.kind === "music-video";
@@ -125,7 +125,7 @@ export default function ItunesPage() {
           </form>
         </header>
 
-        {/* ✅ NEW: mode buttons */}
+       
         <div style={styles.modeRow}>
           <button
             type="button"
@@ -162,7 +162,7 @@ export default function ItunesPage() {
             const key = item.trackId || `${item.wrapperType}-${item.collectionId}-${item.trackName}`;
             const typeLabel = isVideoItem(item) ? "VIDEO" : isAudioItem(item) ? "AUDIO" : "PREVIEW";
 
-            // ✅ NEW: enforce display by mode (for safety)
+        
             const shouldShowVideo = mode === "video";
             const shouldShowAudio = mode === "audio";
 
