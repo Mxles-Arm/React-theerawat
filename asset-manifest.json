@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/React-theerawat/static/css/main.e6e105f4.css",
-    "main.js": "/React-theerawat/static/js/main.dd24cd3a.js",
+    "main.js": "/React-theerawat/static/js/main.eb8976d3.js",
     "static/js/453.26f86030.chunk.js": "/React-theerawat/static/js/453.26f86030.chunk.js",
     "static/media/me01.png": "/React-theerawat/static/media/me01.a136913f14a8263bc779.png",
     "index.html": "/React-theerawat/index.html",
     "main.e6e105f4.css.map": "/React-theerawat/static/css/main.e6e105f4.css.map",
-    "main.dd24cd3a.js.map": "/React-theerawat/static/js/main.dd24cd3a.js.map",
+    "main.eb8976d3.js.map": "/React-theerawat/static/js/main.eb8976d3.js.map",
     "453.26f86030.chunk.js.map": "/React-theerawat/static/js/453.26f86030.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6e105f4.css",
-    "static/js/main.dd24cd3a.js"
+    "static/js/main.eb8976d3.js"
   ]
 }
