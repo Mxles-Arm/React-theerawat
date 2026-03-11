@@ -38,53 +38,53 @@ const App = () => {
   };
 
   const requireAuth = (element) => {
-  if (!userInfo) {
-    return (
-      <div
-        style={{
-          minHeight: "60vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+    if (!userInfo) {
+      return (
         <div
           style={{
-            background: "white",
-            padding: "40px",
-            borderRadius: "15px",
-            textAlign: "center",
-            boxShadow: "0 10px 25px rgba(31, 52, 211, 0.2)",
-            width: "350px",
+            minHeight: "60vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <h2 style={{ marginBottom: "10px" }}> Login Required</h2>
-
-          <p style={{ color: "#555", marginBottom: "20px" }}>
-            Please login first to access this page
-          </p>
-
-          <button
-            onClick={login}
+          <div
             style={{
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "8px",
-              background: "#2563eb",
-              color: "white",
-              fontSize: "16px",
-              cursor: "pointer",
+              background: "white",
+              padding: "40px",
+              borderRadius: "15px",
+              textAlign: "center",
+              boxShadow: "0 10px 25px rgba(31, 52, 211, 0.2)",
+              width: "350px",
             }}
           >
-            Login with Google
-          </button>
-        </div>
-      </div>
-    );
-  }
+            <h2 style={{ marginBottom: "10px" }}>Login Required</h2>
 
-  return element;
-};
+            <p style={{ color: "#555", marginBottom: "20px" }}>
+              Please login first to access this page
+            </p>
+
+            <button
+              onClick={login}
+              style={{
+                padding: "10px 20px",
+                border: "none",
+                borderRadius: "8px",
+                background: "#2563eb",
+                color: "white",
+                fontSize: "16px",
+                cursor: "pointer",
+              }}
+            >
+              Login with Google
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return element;
+  };
 
   const std1 = {
     name: "Theerawat Noonngam",
